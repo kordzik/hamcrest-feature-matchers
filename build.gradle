@@ -1,0 +1,40 @@
+group 'com.github.kordzik'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+ext {
+    vavrVersion = '0.10.2'
+
+    junitVersion = '5.5.0' 
+    hamcrestVersion = '2.2'
+    mockitoVersion = '3.1.0'
+}
+
+dependencies {
+    implementation group: 'com.google.guava', name: 'guava', version: '28.0-jre'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+
+    // TODO?s
+    implementation group: 'io.vavr', name: 'vavr', version: "${vavrVersion}"
+    
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitVersion}"
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: "${hamcrestVersion}"
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: "${mockitoVersion}"
+
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: "${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
