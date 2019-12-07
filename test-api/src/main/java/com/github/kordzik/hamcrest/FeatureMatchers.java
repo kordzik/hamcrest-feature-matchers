@@ -1,4 +1,4 @@
-package com.github.kordzik.matchers.api;
+package com.github.kordzik.hamcrest;
 
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;

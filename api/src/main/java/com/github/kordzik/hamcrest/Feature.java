@@ -1,4 +1,4 @@
-package com.github.kordzik.matchers.api;
+package com.github.kordzik.hamcrest;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -13,4 +13,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public @interface Feature {
 
     boolean gettersOnly() default true;
+
+    String[] includeIn() default {};
 }
