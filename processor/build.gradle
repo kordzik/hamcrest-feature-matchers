@@ -2,12 +2,15 @@ dependencies {
     annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
     compileOnly group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
 
-    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: "${jsr305Version}"
-    implementation group: 'org.hamcrest', name: 'hamcrest', version: "${hamcrestVersion}"
+    implementation project(':api')
+
+    implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: jsr305Version
+//    implementation group: 'org.hamcrest', name: 'hamcrest', version: hamcrestVersion
 
     // TODO?s
-    implementation group: 'io.vavr', name: 'vavr', version: "${vavrVersion}"
+//    implementation group: 'io.vavr', name: 'vavr', version: "${vavrVersion}"
     
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitVersion}"
     testImplementation group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"

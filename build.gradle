@@ -1,7 +1,6 @@
-allprojects {
-    group 'com.github.kordzik'
-    version '1.0-SNAPSHOT'
+apply plugin: 'base'
 
+subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
@@ -21,29 +20,12 @@ allprojects {
 ext {
     autoServiceVersion = '1.0-rc6'
     guavaVersion = '28.1-jre'
+    commonsLangVersion = '3.9'
     jsr305Version = '3.0.2'
     vavrVersion = '0.10.2'
 
     junitVersion = '5.5.0' 
     hamcrestVersion = '2.2'
     mockitoVersion = '3.1.0'
-}
-
-dependencies {
-    annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
-    compileOnly group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
-
-    implementation group: 'com.google.guava', name: 'guava', version: "${guavaVersion}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: "${jsr305Version}"
-    implementation group: 'org.hamcrest', name: 'hamcrest', version: "${hamcrestVersion}"
-
-    // TODO?s
-    implementation group: 'io.vavr', name: 'vavr', version: "${vavrVersion}"
-    
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitVersion}"
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: "${mockitoVersion}"
-
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: "${junitVersion}"
 }
 
