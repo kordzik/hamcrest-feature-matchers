@@ -10,22 +10,24 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 final class FeatureMatcherClassWriter extends AbstractCodeWriter {
 
     private static final String FEATURE_MATCHER_CLASS_SUFFIX = "Matchers";
 
     private final TypeElement featureClass;
-    private final List<ExecutableElement> methods;
-    private final PrintWriter writer;
+    private final List<FeatureMatcherMethodWriter> methodWriters;
 
     private final String packageName;
     private final String featureMatcherClassName;
 
     FeatureMatcherClassWriter(TypeElement featureClass, List<ExecutableElement> methods, PrintWriter writer) {
+        super(writer);
         this.featureClass = requireNonNull(featureClass, "featureClass");
-        this.methods = requireNonNull(methods, "methods");
-        this.writer = requireNonNull(writer, "printWriter");
+        this.methodWriters = requireNonNull(methods, "methods").stream()
+                .map(m -> new FeatureMatcherMethodWriter(m, writer))
+                .collect(toUnmodifiableList());
         this.packageName = getPackageName();
         this.featureMatcherClassName = getFeatureMatcherClassName();
     }
@@ -33,7 +35,7 @@ final class FeatureMatcherClassWriter extends AbstractCodeWriter {
     void write() {
         writePackageAndImports();
         writeClassOpening();
-        methods.forEach(this::writeFeatureMethods);
+        methodWriters.forEach(FeatureMatcherMethodWriter::writeMethods);
         writeClassClosing();
     }
 
@@ -55,9 +57,11 @@ final class FeatureMatcherClassWriter extends AbstractCodeWriter {
     private void writePackageAndImports() {
         writer.printf("package %s;%n", packageName);
         writer.println();
-        writeImport(CodeConstants.HAMCREST_MATCHER_CLASS);
+        writeImport(CodeConstants.HAMCREST_MATCHER_CLASS_FQN);
+        methodWriters.forEach(FeatureMatcherMethodWriter::writeImports);
         writer.println();
-        writeImportStatic(CodeConstants.FEATURE_MATCHER_METHOD);
+        writeImportStatic(CodeConstants.FEATURE_MATCHER_METHOD_FQN);
+        writeImportStatic(CodeConstants.HAMCREST_MATCHERS_IS_METHOD_FQN);
         writer.println();
     }
 
@@ -70,17 +74,5 @@ final class FeatureMatcherClassWriter extends AbstractCodeWriter {
 
     private void writeClassClosing() {
         writer.println("}");
-    }
-
-    private void writeFeatureMethods(ExecutableElement method) {
-        new FeatureMatcherMethodWriter(method, writer).writeImports();
-    }
-
-    private void writeImport(String name) {
-        writer.printf("import %s;%n", name);
-    }
-
-    private void writeImportStatic(String name) {
-        writer.printf("import static %s;%n", name);
     }
 }
