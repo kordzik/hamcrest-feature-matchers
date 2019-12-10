@@ -15,7 +15,8 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
 import javax.tools.Diagnostic;
-import java.util.List;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 @SupportedAnnotationTypes(FEATURES_ANNOTATION)
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
 @AutoService(Processor.class)
 public class FeatureMatcherProcessor extends AbstractProcessor {
 
@@ -34,7 +35,7 @@ public class FeatureMatcherProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         var grouped = annotations.stream()
                 .flatMap(a -> roundEnv.getElementsAnnotatedWith(a).stream())
-                .collect(groupingBy(FeatureMatcherProcessor::partition));
+                .collect(groupingBy(FeatureMatcherProcessor::elementKind));
         // errors
         Optional.ofNullable(grouped.get(InternalAnnotatedElement.OTHER))
                 .ifPresent(others -> others.forEach(this::logError));
@@ -48,7 +49,7 @@ public class FeatureMatcherProcessor extends AbstractProcessor {
         return true;
     }
 
-    private static InternalAnnotatedElement partition(Element element) {
+    private static InternalAnnotatedElement elementKind(Element element) {
         switch (element.getKind()) {
             case CLASS:
                 return InternalAnnotatedElement.CLASS;
@@ -80,8 +81,8 @@ public class FeatureMatcherProcessor extends AbstractProcessor {
         }
     }
 
-    private void processValidClass(TypeElement annotatedClass) {
-        final List<ExecutableElement> candidateMethods = annotatedClass.getEnclosedElements().stream()
+    private void processValidClass(TypeElement annotatedClass) throws IOException {
+        var candidateMethods = annotatedClass.getEnclosedElements().stream()
                 .filter(e -> e.getKind() == ElementKind.METHOD)
                 .map(ExecutableElement.class::cast)
                 .filter(FeatureMatcherProcessor::isPublic)
@@ -93,7 +94,11 @@ public class FeatureMatcherProcessor extends AbstractProcessor {
             throw new IllegalStateException(format("%s has no feature methods", annotatedClass.getQualifiedName()));
         }
 
-
+        var featureMatcherClass = new FeatureMatcherClass(annotatedClass);
+        var classFile = processingEnv.getFiler().createSourceFile(featureMatcherClass.getFqn());
+        try(var writer = new PrintWriter(classFile.openWriter())) {
+            new FeatureMatcherClassWriter(featureMatcherClass, candidateMethods, writer).write();
+        }
     }
 
     private void processMethod(Element annotatedMethod) {

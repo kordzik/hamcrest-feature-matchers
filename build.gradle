@@ -1,11 +1,14 @@
 apply plugin: 'base'
 
 subprojects {
-    apply plugin: 'java'
+    // TODO only for api/test-api
+    apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 
-    sourceCompatibility = 1.11
-    targetCompatibility = 1.11
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 
     repositories {
         mavenLocal()
@@ -28,4 +31,3 @@ ext {
     hamcrestVersion = '2.2'
     mockitoVersion = '3.1.0'
 }
-

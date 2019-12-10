@@ -3,18 +3,18 @@ dependencies {
     compileOnly group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
 
     implementation project(':api')
+    implementation project(':test-api')
 
+    // TODO remove unnecessary stuff
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: commonsLangVersion
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: jsr305Version
-//    implementation group: 'org.hamcrest', name: 'hamcrest', version: hamcrestVersion
+    implementation group: 'io.vavr', name: 'vavr', version: vavrVersion
 
-    // TODO?s
-//    implementation group: 'io.vavr', name: 'vavr', version: "${vavrVersion}"
-    
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitVersion}"
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: "${mockitoVersion}"
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: "${mockitoVersion}"
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: mockitoVersion
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: hamcrestVersion
 
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: "${junitVersion}"
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
 }

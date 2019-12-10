@@ -23,6 +23,7 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
     private final ExecutableElement method;
 
     private final String methodName;
+    // TODO pass in feature matcher class
     private final String classNameSimple;
     private final String featureName;
     private final String featureTypeFqn;
