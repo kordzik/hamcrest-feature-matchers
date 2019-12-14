@@ -2,8 +2,9 @@ dependencies {
     annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
     compileOnly group: 'com.google.auto.service', name: 'auto-service', version: "${autoServiceVersion}"
 
-    implementation project(':api')
-    implementation project(':test-api')
+    // TODO?
+//    implementation project(':api')
+//    implementation project(':test-api')
 
     // TODO remove unnecessary stuff
     implementation group: 'com.google.guava', name: 'guava', version: guavaVersion

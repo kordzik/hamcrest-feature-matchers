@@ -12,6 +12,10 @@ final class FeatureMatcherClassWriter extends AbstractCodeWriter {
     private final FeatureMatcherClass featureMatcherClass;
     private final List<FeatureMatcherMethodWriter> methodWriters;
 
+    FeatureMatcherClassWriter(FeatureMatcherCandidate candidate, PrintWriter writer) {
+        this(candidate.getFeatureMatcherClass(), candidate.getMethods(), writer);
+    }
+
     FeatureMatcherClassWriter(FeatureMatcherClass featureMatcherClass, List<ExecutableElement> methods, PrintWriter writer) {
         super(writer);
         this.featureMatcherClass = requireNonNull(featureMatcherClass, "featureClass");

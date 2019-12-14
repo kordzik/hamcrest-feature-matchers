@@ -1,3 +1,4 @@
 dependencies {
+    api project(':api')
     api group: 'org.hamcrest', name: 'hamcrest', version: hamcrestVersion
 }

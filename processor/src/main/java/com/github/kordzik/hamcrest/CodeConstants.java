@@ -2,8 +2,16 @@ package com.github.kordzik.hamcrest;
 
 final class CodeConstants {
 
+    private CodeConstants() {
+    }
+
     static final String API_PACKAGE = "com.github.kordzik.hamcrest";
-    static final String FEATURES_ANNOTATION = API_PACKAGE + ".Feature";
+    static final String GENERATE_ANNOTATION = API_PACKAGE + ".GenerateFeatureMatchers";
+
+    static final String PACKAGES_PROPERTY = "packages";
+    static final String PACKAGES_ENCLOSING_PROPERTY = "packagesEnclosing";
+    static final String ANNOTATED_WITH_PROPERTY = "annotatedWith";
+    static final String CLASSES_PROPERTY = "classes";
 
     static final String FEATURE_MATCHERS_CLASS = "FeatureMatchers";
     static final String FEATURE_MATCHERS_CLASS_FQN = API_PACKAGE + "." + FEATURE_MATCHERS_CLASS;
