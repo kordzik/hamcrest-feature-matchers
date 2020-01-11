@@ -7,10 +7,6 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 @Retention(CLASS)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.METHOD})
 public @interface Feature {
-
-//    boolean gettersOnly() default true;
-//
-//    String[] includeIn() default {};
 }

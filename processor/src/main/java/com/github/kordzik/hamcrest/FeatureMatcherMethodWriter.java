@@ -23,7 +23,6 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
     private final ExecutableElement method;
 
     private final String methodName;
-    // TODO pass in feature matcher class
     private final String classNameSimple;
     private final String featureName;
     private final String featureTypeFqn;
@@ -37,7 +36,7 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
         this.classNameSimple = getClassNameSimple();
         this.featureName = getFeatureName();
         this.featureTypeFqn = getFeatureType();
-        this.featureTypeSimple = featureTypeFqn.substring(featureTypeFqn.lastIndexOf('.'));
+        this.featureTypeSimple = featureTypeFqn.substring(featureTypeFqn.lastIndexOf('.') + 1);
     }
 
     private String getMethodName() {
@@ -105,8 +104,10 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
     private void writeFeatureIsMethod() {
         final String expectedVarName = format("expected%s", capitalize(featureName));
 
-        writer.printf("%spublic static with%s(%s %s) {",
+        writer.printf("%spublic static %s<%s> with%s(%s %s) {%n",
                 tab(1),
+                HAMCREST_MATCHER_CLASS,
+                classNameSimple,
                 capitalize(featureName),
                 featureTypeSimple,
                 expectedVarName);
@@ -121,8 +122,10 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
     private void writeFeatureMatchMethod() {
         final String matcherVarName = format("%s%s", featureName, HAMCREST_MATCHER_CLASS);
 
-        writer.printf("%spublic static with%sThat(%s<%s> %s) {",
+        writer.printf("%spublic static %s<%s> with%sThat(%s<%s> %s) {%n",
                 tab(1),
+                HAMCREST_MATCHER_CLASS,
+                classNameSimple,
                 capitalize(featureName),
                 HAMCREST_MATCHER_CLASS,
                 featureTypeSimple,

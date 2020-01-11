@@ -43,7 +43,7 @@ final class FeatureMatcherClassWriter extends AbstractCodeWriter {
     }
 
     private void writeClassOpening() {
-        writer.printf("class %s {%n", featureMatcherClass.getName());
+        writer.printf("public final class %s {%n", featureMatcherClass.getName());
         writer.println();
         writer.printf("%sprivate %s() {}%n", tab(1), featureMatcherClass.getName());
         writer.println();

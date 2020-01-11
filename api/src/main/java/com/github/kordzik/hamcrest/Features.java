@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 @Retention(CLASS)
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE})
 public @interface Features {
 }

@@ -2,12 +2,15 @@ package com.github.kordzik.hamcrest;
 
 import com.google.common.base.MoreObjects;
 
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeKind;
 import java.util.List;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 final class FeatureMatcherCandidate {
@@ -24,24 +27,36 @@ final class FeatureMatcherCandidate {
         this.featureMatcherClass = new FeatureMatcherClass(type);
     }
 
-    public static FeatureMatcherCandidate fromType(FeatureMatcherCandidateSource source, TypeElement type) {
-        // TODO
-        return null;
+    static FeatureMatcherCandidate fromType(FeatureMatcherCandidateSource source, TypeElement type) {
+        var allCandidateMethods = type.getEnclosedElements().stream()
+                .filter(e -> e.getKind() == ElementKind.METHOD)
+                .map(ExecutableElement.class::cast)
+                .filter(ElementUtils::isPublic)
+                .filter(not(ElementUtils::isStatic))
+                .filter(m -> m.getParameters().isEmpty())
+                .filter(FeatureMatcherCandidate::isEligibleReturnType)
+                .collect(toUnmodifiableList());
+        var annotatedCandidateMethods = allCandidateMethods.stream()
+                .filter(m -> m.getAnnotation(Feature.class) != null)
+                .collect(toUnmodifiableList());
+
+        var methods  = annotatedCandidateMethods.isEmpty() ? allCandidateMethods : annotatedCandidateMethods;
+        return new FeatureMatcherCandidate(source, type, methods);
     }
 
-    public FeatureMatcherCandidateSource getSource() {
+    FeatureMatcherCandidateSource getSource() {
         return source;
     }
 
-    public TypeElement getType() {
+    TypeElement getType() {
         return type;
     }
 
-    public List<ExecutableElement> getMethods() {
+    List<ExecutableElement> getMethods() {
         return methods;
     }
 
-    public FeatureMatcherClass getFeatureMatcherClass() {
+    FeatureMatcherClass getFeatureMatcherClass() {
         return featureMatcherClass;
     }
 
@@ -69,5 +84,10 @@ final class FeatureMatcherCandidate {
                 .add("type", type.getQualifiedName())
                 .add("methods", methods.stream().map(ExecutableElement::getSimpleName).collect(toUnmodifiableList()))
                 .toString();
+    }
+
+    private static boolean isEligibleReturnType(ExecutableElement candidateMethod) {
+        return candidateMethod.getReturnType().getKind().isPrimitive() ||
+                candidateMethod.getReturnType().getKind() == TypeKind.DECLARED;
     }
 }
