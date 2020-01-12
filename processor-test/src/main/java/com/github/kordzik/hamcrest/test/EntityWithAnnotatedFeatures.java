@@ -6,14 +6,14 @@ import com.github.kordzik.hamcrest.Features;
 import static java.util.Objects.requireNonNull;
 
 @Features
-public class TestEntityWithAnnotatedFeatures {
+public class EntityWithAnnotatedFeatures {
 
     private final long id;
     private final String name;
     private final String foo;
     private final String bar;
 
-    public TestEntityWithAnnotatedFeatures(long id, String name, String foo, String bar) {
+    public EntityWithAnnotatedFeatures(long id, String name, String foo, String bar) {
         this.id = id;
         this.name = requireNonNull(name, "name");
         this.foo = foo;

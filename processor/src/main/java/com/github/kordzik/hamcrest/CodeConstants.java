@@ -1,6 +1,6 @@
 package com.github.kordzik.hamcrest;
 
-final class CodeConstants {
+public final class CodeConstants {
 
     private CodeConstants() {
     }
@@ -17,7 +17,7 @@ final class CodeConstants {
     static final String FEATURE_MATCHERS_CLASS_FQN = API_PACKAGE + "." + FEATURE_MATCHERS_CLASS;
     static final String FEATURE_MATCHER_METHOD = "featureMatcher";
     static final String FEATURE_MATCHER_METHOD_FQN = FEATURE_MATCHERS_CLASS_FQN + "." + FEATURE_MATCHER_METHOD;
-    static final String FEATURE_MATCHER_CLASS_SUFFIX = "Matchers";
+    public static final String FEATURE_MATCHER_CLASS_SUFFIX = "Matchers";
 
     static final String HAMCREST_PACKAGE = "org.hamcrest";
     static final String HAMCREST_MATCHER_CLASS = "Matcher";

@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.StringUtils.uncapitalize;
 final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
 
     private static final String GETTER_PREFIX = "get";
+    private static final String IS_PREFIX = "is";
 
     private final ExecutableElement method;
 
@@ -52,9 +53,13 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
 
 
     private String getFeatureName() {
-        return methodName.startsWith(GETTER_PREFIX) ?
-                uncapitalize(methodName.substring(GETTER_PREFIX.length())) :
-                methodName;
+        if (methodName.startsWith(GETTER_PREFIX)) {
+            return uncapitalize(methodName.substring(GETTER_PREFIX.length()));
+        } else if (methodName.startsWith(IS_PREFIX)) {
+            return uncapitalize(methodName.substring(IS_PREFIX.length()));
+        } else {
+            return methodName;
+        }
     }
 
     private String getFeatureType() {

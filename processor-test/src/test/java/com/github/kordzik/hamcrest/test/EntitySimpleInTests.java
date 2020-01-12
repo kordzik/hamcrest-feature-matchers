@@ -5,12 +5,12 @@ import com.github.kordzik.hamcrest.Features;
 import static java.util.Objects.requireNonNull;
 
 @Features
-public class TestEntitySimple {
+public class EntitySimpleInTests {
 
     private final long id;
     private final String name;
 
-    public TestEntitySimple(long id, String name) {
+    public EntitySimpleInTests(long id, String name) {
         this.id = id;
         this.name = requireNonNull(name, "name");
     }
