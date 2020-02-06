@@ -9,10 +9,12 @@ public class EntitySimple {
 
     private final long id;
     private final String name;
+    private final boolean likely;
 
-    public EntitySimple(long id, String name) {
+    public EntitySimple(long id, String name, boolean likely) {
         this.id = id;
         this.name = requireNonNull(name, "name");
+        this.likely = likely;
     }
 
     public long getId() {
@@ -21,5 +23,9 @@ public class EntitySimple {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isLikely() {
+        return likely;
     }
 }

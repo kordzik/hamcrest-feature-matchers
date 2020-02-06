@@ -1,7 +1,6 @@
 apply plugin: 'base'
 
 subprojects {
-    // TODO only for api/test-api
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
 

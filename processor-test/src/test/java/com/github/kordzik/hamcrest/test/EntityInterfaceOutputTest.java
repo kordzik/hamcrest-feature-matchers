@@ -2,7 +2,7 @@ package com.github.kordzik.hamcrest.test;
 
 import java.util.Set;
 
-public class EntitySimpleOutputTest extends AbstractProcessorOutputTest {
+public class EntityInterfaceOutputTest extends AbstractProcessorOutputTest {
 
     protected static Set<String> generatedFeatures() {
         return Set.of("id", "name", "likely");
@@ -10,6 +10,6 @@ public class EntitySimpleOutputTest extends AbstractProcessorOutputTest {
 
     @Override
     protected Class<?> featureClass() {
-        return EntitySimple.class;
+        return EntityInterface.class;
     }
 }

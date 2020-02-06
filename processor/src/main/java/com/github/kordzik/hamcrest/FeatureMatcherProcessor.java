@@ -17,7 +17,6 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.github.kordzik.hamcrest.CodeConstants.GENERATE_ANNOTATION;
@@ -25,6 +24,7 @@ import static com.github.kordzik.hamcrest.ElementUtils.getPackage;
 import static com.github.kordzik.hamcrest.ElementUtils.getQualifiedName;
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.lang.String.format;
+import static java.util.function.Function.identity;
 
 @SupportedAnnotationTypes(GENERATE_ANNOTATION)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
@@ -39,7 +39,7 @@ public class FeatureMatcherProcessor extends AbstractProcessor {
                         .map(a -> new FeatureMatcherCandidateSource(processingEnv.getElementUtils(), e, a)))
                 .filter(c -> c.getAnnotationQualifiedName().equals(GENERATE_ANNOTATION))
                 .flatMap(this::findCandidates)
-                .collect(toImmutableMap(FeatureMatcherCandidate::getType, Function.identity(), this::discardAndLog));
+                .collect(toImmutableMap(FeatureMatcherCandidate::getType, identity(), this::discardAndLog));
         candidates.values().forEach(this::writeMatcher);
 
         return true;
