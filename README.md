@@ -7,6 +7,7 @@ TODO
 * proper name / package?
 * test other variants of GenerateFeatureMatchers
 * test clash between getter and no-getter etc (each variant)
+* output package - think through
 * support generic types? in particular should work with iterable matchers well
 * custom method filter
 * composite feature methods (using @Feature)

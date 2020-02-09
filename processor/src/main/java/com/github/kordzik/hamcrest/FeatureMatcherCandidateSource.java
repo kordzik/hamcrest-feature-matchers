@@ -72,13 +72,18 @@ final class FeatureMatcherCandidateSource {
     }
 
     boolean isAnnotated(TypeElement element) {
+        final Set<Element> supportedAnnotations = getAnnotatedWith().stream()
+                .map(DeclaredType::asElement)
+                .collect(toUnmodifiableSet());
+        if (supportedAnnotations.isEmpty()) {
+            // empty set means no annotation filter
+            return true;
+        }
+
         // compare elements and not declared types, as we are dealing with marker annotations, so the specifics are
         // irrelevant
         final Set<Element> allAnnotations = elements.getAllAnnotationMirrors(element).stream()
                 .map(AnnotationMirror::getAnnotationType)
-                .map(DeclaredType::asElement)
-                .collect(toUnmodifiableSet());
-        final Set<Element> supportedAnnotations = getAnnotatedWith().stream()
                 .map(DeclaredType::asElement)
                 .collect(toUnmodifiableSet());
 

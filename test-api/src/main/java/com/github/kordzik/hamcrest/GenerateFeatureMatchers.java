@@ -14,7 +14,7 @@ public @interface GenerateFeatureMatchers {
 
     Class<?>[] packagesEnclosing() default {};
 
-    Class<? extends Annotation>[] annotatedWith() default { Features.class };
-
     Class<?>[] classes() default {};
+
+    Class<? extends Annotation>[] annotatedWith() default { Features.class };
 }
