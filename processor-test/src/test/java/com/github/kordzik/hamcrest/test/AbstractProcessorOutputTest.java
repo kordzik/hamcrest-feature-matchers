@@ -15,8 +15,11 @@ import static com.github.kordzik.hamcrest.test.ProcessorTests.featureMatcherClas
 import static java.lang.reflect.Modifier.isPublic;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Arrays.stream;
+import static java.util.function.Predicate.not;
+import static java.util.stream.Collectors.toUnmodifiableSet;
 import static org.apache.commons.lang3.ClassUtils.primitiveToWrapper;
 import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractProcessorOutputTest {
@@ -26,10 +29,22 @@ public abstract class AbstractProcessorOutputTest {
     @ParameterizedTest
     @MethodSource("generatedFeatures")
     void testFeatureExists(String featureName) {
-        featureClasses().forEach(CheckedConsumer.<Class<?>>of(fc -> doTestFeatureExists(fc, featureName)).unchecked());
+        featureClasses().forEach(CheckedConsumer.<Class<?>>of(fc -> testFeatureExists(fc, featureName)).unchecked());
     }
 
-    private static void doTestFeatureExists(Class<?> featureClass, String featureName) throws Exception {
+    @ParameterizedTest
+    @MethodSource("javaBuiltInFeatures")
+    void testJavaBuiltInDoesNotExist(String builtInName) {
+        featureClasses().stream()
+                .filter(not(Class::isInterface))
+                .forEach(CheckedConsumer.<Class<?>>of(fc -> testFeatureDoesNotExist(fc, builtInName)).unchecked());
+    }
+
+    static Set<String> javaBuiltInFeatures() {
+        return Set.of("toString", "hashCode", "class");
+    }
+
+    private static void testFeatureExists(Class<?> featureClass, String featureName) throws Exception {
         final var featureMatcherClass = featureMatcherClass(featureClass);
         final var featureMatchMethod = featureMatcherClass.getMethod(featureMatchMethodName(featureName), Matcher.class);
         assertTrue(isPublic(featureMatchMethod.getModifiers()));
@@ -40,6 +55,16 @@ public abstract class AbstractProcessorOutputTest {
                 featureIsReturnType);
         assertTrue(isPublic(featureIsMethod.getModifiers()));
         assertTrue(isStatic(featureIsMethod.getModifiers()));
+    }
+
+    protected static void testFeatureDoesNotExist(Class<?> featureClass, String featureName) {
+        // ensure the feature exists in feature class
+        findFeatureMethod(featureClass, featureName);
+        Set<String> methodNames = stream(featureMatcherClass(featureClass).getMethods())
+                .map(Method::getName)
+                .collect(toUnmodifiableSet());
+        assertFalse(methodNames.contains(featureMatchMethodName(featureName)));
+        assertFalse(methodNames.contains(featureIsMethodName(featureName)));
     }
 
     protected static Method findFeatureMethod(Class<?> featureClass, String featureName) {

@@ -39,6 +39,10 @@ final class FeatureMatcherCandidateSource {
         this.elements = elements;
     }
 
+    Elements elements() {
+        return elements;
+    }
+
     Element getElement() {
         return element;
     }

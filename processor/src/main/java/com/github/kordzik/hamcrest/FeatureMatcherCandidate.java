@@ -2,10 +2,10 @@ package com.github.kordzik.hamcrest;
 
 import com.google.common.base.MoreObjects;
 
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
+import javax.lang.model.util.ElementFilter;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,19 +28,19 @@ final class FeatureMatcherCandidate {
     }
 
     static FeatureMatcherCandidate fromType(FeatureMatcherCandidateSource source, TypeElement type) {
-        var allCandidateMethods = type.getEnclosedElements().stream()
-                .filter(e -> e.getKind() == ElementKind.METHOD)
-                .map(ExecutableElement.class::cast)
+        final var members = source.elements().getAllMembers(type);
+        final var allCandidateMethods = ElementFilter.methodsIn(members).stream()
                 .filter(ElementUtils::isPublic)
                 .filter(not(ElementUtils::isStatic))
                 .filter(m -> m.getParameters().isEmpty())
                 .filter(FeatureMatcherCandidate::isEligibleReturnType)
+                .filter(not(ElementUtils::isJavaBuiltInType))
                 .collect(toUnmodifiableList());
-        var annotatedCandidateMethods = allCandidateMethods.stream()
+        final var annotatedCandidateMethods = allCandidateMethods.stream()
                 .filter(m -> m.getAnnotation(Feature.class) != null)
                 .collect(toUnmodifiableList());
 
-        var methods  = annotatedCandidateMethods.isEmpty() ? allCandidateMethods : annotatedCandidateMethods;
+        final var methods  = annotatedCandidateMethods.isEmpty() ? allCandidateMethods : annotatedCandidateMethods;
         return new FeatureMatcherCandidate(source, type, methods);
     }
 

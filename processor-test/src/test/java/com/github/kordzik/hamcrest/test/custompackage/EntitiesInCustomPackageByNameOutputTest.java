@@ -6,7 +6,7 @@ import com.github.kordzik.hamcrest.test.custompackage.byname2.EntityInCustomPack
 
 import java.util.Set;
 
-public class EntityInCustomPackageByNameOutputTest extends AbstractProcessorOutputTest {
+public class EntitiesInCustomPackageByNameOutputTest extends AbstractProcessorOutputTest {
 
     protected static Set<String> generatedFeatures() {
         return Set.of("id", "name", "likely");

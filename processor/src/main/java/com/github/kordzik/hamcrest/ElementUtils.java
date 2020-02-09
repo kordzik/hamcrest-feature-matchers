@@ -9,6 +9,7 @@ import javax.lang.model.element.QualifiedNameable;
 import javax.lang.model.element.TypeElement;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.util.Objects.requireNonNull;
@@ -16,6 +17,8 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 final class ElementUtils {
+
+    private static final String JAVA_LANG_PACKAGE_NAME = "java.lang";
 
     private ElementUtils() {
     }
@@ -65,5 +68,14 @@ final class ElementUtils {
 
     static boolean isStatic(Element element) {
         return element.getModifiers().contains(Modifier.STATIC);
+    }
+
+    static boolean isJavaBuiltInType(Element element) {
+        final var enclosingType = Optional.ofNullable(element.getEnclosingElement())
+                .filter(TypeElement.class::isInstance)
+                .map(TypeElement.class::cast)
+                .orElseThrow(() -> new IllegalArgumentException("Parent was not a type: " + element));
+
+        return getPackage(enclosingType).getQualifiedName().contentEquals(JAVA_LANG_PACKAGE_NAME);
     }
 }

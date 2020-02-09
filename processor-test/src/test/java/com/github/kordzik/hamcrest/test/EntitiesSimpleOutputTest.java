@@ -7,7 +7,7 @@ import java.util.Set;
 import static com.github.kordzik.hamcrest.test.ProcessorTests.featureMatcherClass;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SimpleEntitiesOutputTest extends AbstractProcessorOutputTest {
+public class EntitiesSimpleOutputTest extends AbstractProcessorOutputTest {
 
     protected static Set<String> generatedFeatures() {
         return Set.of("id", "name", "likely");
@@ -23,7 +23,12 @@ public class SimpleEntitiesOutputTest extends AbstractProcessorOutputTest {
     }
 
     @Test
-    void shouldNotGeneratedForInheritingClass() {
+    void shouldNotGenerateForNotAnnotatedClass() {
+        assertThrows(ClassNotFoundException.class, () -> featureMatcherClass(EntitySimpleNoAnnotation.class));
+    }
+
+    @Test
+    void shouldNotGenerateForInheritingClass() {
         assertThrows(ClassNotFoundException.class, () -> featureMatcherClass(EntityInterfaceImpl.class));
     }
 }
