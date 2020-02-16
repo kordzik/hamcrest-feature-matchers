@@ -5,9 +5,11 @@ TODO
 # TODO
 
 * proper name / package?
-* test clash between getter and no-getter etc (each variant)
+* tests for custom return types and all supported primitives
+    * also manual tests to actually use the generated matchers
 * output package - think through
     * customizable (THIS, MIRROR, CUSTOM)
+    * check patterns in immutables
 * inheritance from interfaces
     * research - JDK doesn't seem to support this
 * inheritance customizable

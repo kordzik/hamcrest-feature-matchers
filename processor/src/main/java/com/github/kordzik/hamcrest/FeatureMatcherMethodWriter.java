@@ -14,14 +14,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.StringUtils.capitalize;
-import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
 
-    private static final String GETTER_PREFIX = "get";
-    private static final String IS_PREFIX = "is";
-
     private final ExecutableElement method;
+    private final FeatureMatcherWriteContext writeContext;
 
     private final String methodName;
     private final String classNameSimple;
@@ -29,9 +26,10 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
     private final String featureTypeFqn;
     private final String featureTypeSimple;
 
-    FeatureMatcherMethodWriter(ExecutableElement method, PrintWriter writer) {
+    FeatureMatcherMethodWriter(ExecutableElement method, FeatureMatcherWriteContext writeContext, PrintWriter writer) {
         super(writer);
         this.method = requireNonNull(method, "method");
+        this.writeContext = requireNonNull(writeContext, "writeContext");
 
         this.methodName = getMethodName();
         this.classNameSimple = getClassNameSimple();
@@ -53,13 +51,7 @@ final class FeatureMatcherMethodWriter extends AbstractCodeWriter {
 
 
     private String getFeatureName() {
-        if (methodName.startsWith(GETTER_PREFIX)) {
-            return uncapitalize(methodName.substring(GETTER_PREFIX.length()));
-        } else if (methodName.startsWith(IS_PREFIX)) {
-            return uncapitalize(methodName.substring(IS_PREFIX.length()));
-        } else {
-            return methodName;
-        }
+        return writeContext.getFeatureName(methodName);
     }
 
     private String getFeatureType() {
